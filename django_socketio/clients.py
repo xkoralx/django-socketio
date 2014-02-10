@@ -31,8 +31,10 @@ def client_end(request, socket, context):
     for channel in socket.channels[:]:
         socket.unsubscribe(channel)
     # Remove the client.
-    del CLIENTS[socket.session.session_id]
-
+    try:
+        del CLIENTS[socket.session.session_id]
+    except KeyError:
+        print "Could not delete client: {0}, django-socketio clients.py".format(socket.session.session_id)
 
 def client_end_all():
     """
